@@ -7,7 +7,7 @@ import { defineTool } from '@deepseek-ai/dsh-tools'
 import { DcError, type DatasetRuntime } from '../runtime.ts'
 import type { CardInput } from '../card.ts'
 import type { DatasetInspection } from '../inspect.ts'
-import { ERROR_SCHEMA } from './shared.ts'
+import { ERROR_SCHEMA, inspectionProblem } from './shared.ts'
 
 const OUTPUT_SCHEMA = {
   type: 'object',
@@ -60,11 +60,12 @@ export function makeDatasetCardTool(runtime: DatasetRuntime) {
     },
     async execute(args: unknown) {
       const request = args as { inspection?: DatasetInspection } & CardInput
-      if (request.inspection === undefined || !Array.isArray(request.inspection.columns)) {
-        return { ok: false as const, error: { code: 'INVALID_INPUT', message: 'pass the inspection object from dataset_inspect' } }
+      const problem = inspectionProblem(request.inspection)
+      if (problem !== undefined) {
+        return { ok: false as const, error: { code: 'INVALID_INPUT', message: `pass the inspection object from dataset_inspect (${problem})` } }
       }
       try {
-        const card = runtime.card(request.inspection, request)
+        const card = runtime.card(request.inspection as DatasetInspection, request)
         return { ok: true as const, card: card as never, markdown: card.markdown, sarif: card.sarif as never }
       } catch (error) {
         if (error instanceof DcError) return { ok: false as const, error: { code: error.code, message: error.message } }

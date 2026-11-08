@@ -59,12 +59,17 @@ describe('runtime', () => {
 
   it('rejects traversal, unsupported formats, oversize and parse errors', async () => {
     await expect(runtime().inspect({ path: '../escape.csv' })).rejects.toMatchObject({ code: 'PATH_ESCAPE' })
+    await expect(runtime().inspect({ path: path.resolve(workspace, '..', 'outside.csv') })).rejects.toMatchObject({ code: 'PATH_ESCAPE' })
     await writeFile(path.join(workspace, 'sheet.xlsx'), 'x', 'utf8')
     await expect(runtime().inspect({ path: 'sheet.xlsx' })).rejects.toMatchObject({ code: 'UNSUPPORTED_FORMAT' })
     const tiny = new DatasetRuntime({ config: resolveConfig({ workspaceRoot: workspace, root: store, maxBytes: 10 }), now: () => AT })
     await expect(tiny.inspect({ path: 'people.csv' })).rejects.toMatchObject({ code: 'TOO_LARGE' })
     await writeFile(path.join(workspace, 'broken.json'), '{oops', 'utf8')
     await expect(runtime().inspect({ path: 'broken.json' })).rejects.toMatchObject({ code: 'PARSE_ERROR' })
+    await writeFile(path.join(workspace, 'nulls.json'), '[null]', 'utf8')
+    await expect(runtime().inspect({ path: 'nulls.json' })).rejects.toMatchObject({ code: 'PARSE_ERROR' })
+    await writeFile(path.join(workspace, 'scalar.jsonl'), '42\n', 'utf8')
+    await expect(runtime().inspect({ path: 'scalar.jsonl' })).rejects.toMatchObject({ code: 'PARSE_ERROR' })
   })
 })
 
@@ -112,6 +117,23 @@ describe('tools', () => {
     expect(value.error.code).toBe('INVALID_INPUT')
     const noInspection = (await makeDatasetCardTool(runtime()).execute({ inspection: {} }, EXEC)) as { ok: false; error: { code: string } }
     expect(noInspection.error.code).toBe('INVALID_INPUT')
+  })
+
+  it('rejects a malformed inspection instead of throwing in the renderer', async () => {
+    const inspected = (await makeDatasetInspectTool(runtime()).execute(
+      { path: 'people.csv', license: 'CC BY 4.0', ethics: 'IRB-1' },
+      EXEC,
+    )) as { ok: true; inspection: DatasetInspection }
+    const badPii = (await makeDatasetPiiTool().execute(
+      { inspection: { ...inspected.inspection, pii: [null] } },
+      EXEC,
+    )) as { ok: false; error: { code: string } }
+    expect(badPii.error.code).toBe('INVALID_INPUT')
+    const badCard = (await makeDatasetCardTool(runtime()).execute(
+      { inspection: { ...inspected.inspection, columns: [null] } },
+      EXEC,
+    )) as { ok: false; error: { code: string } }
+    expect(badCard.error.code).toBe('INVALID_INPUT')
   })
 })
 

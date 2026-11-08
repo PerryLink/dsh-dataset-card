@@ -6,6 +6,16 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- JSON/JSONL datasets whose entries are not objects now fail with `PARSE_ERROR`
+  instead of throwing a `TypeError`.
+- `dataset_pii`/`dataset_card` validate the supplied inspection and return
+  `INVALID_INPUT` for malformed JSON instead of throwing in the renderer.
+- Package author corrected to the dataset-card contributors.
+- Regression tests for shape rejection and malformed inspection JSON (13 total).
+
+
 ## [0.1.0] - 2026-11-08
 
 First release: dataset profiling, redacted PII scan and Datasheet export.

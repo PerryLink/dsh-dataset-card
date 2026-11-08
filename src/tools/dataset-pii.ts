@@ -4,7 +4,7 @@
  */
 
 import { defineTool } from '@deepseek-ai/dsh-tools'
-import { ERROR_SCHEMA } from './shared.ts'
+import { ERROR_SCHEMA, inspectionProblem } from './shared.ts'
 import type { DatasetInspection } from '../inspect.ts'
 
 const OUTPUT_SCHEMA = {
@@ -42,10 +42,11 @@ export function makeDatasetPiiTool() {
     },
     async execute(args: unknown) {
       const request = args as { inspection?: DatasetInspection }
-      if (request.inspection === undefined || !Array.isArray(request.inspection.pii)) {
-        return { ok: false as const, error: { code: 'INVALID_INPUT', message: 'pass the inspection object from dataset_inspect' } }
+      const problem = inspectionProblem(request.inspection)
+      if (problem !== undefined) {
+        return { ok: false as const, error: { code: 'INVALID_INPUT', message: `pass the inspection object from dataset_inspect (${problem})` } }
       }
-      const inspection = request.inspection
+      const inspection = request.inspection as DatasetInspection
       const byKind: Record<string, number> = {}
       for (const finding of inspection.pii) byKind[finding.kind] = (byKind[finding.kind] ?? 0) + 1
       const recommendations: string[] = []

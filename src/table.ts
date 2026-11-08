@@ -12,8 +12,8 @@
 /** Parse failure. */
 export class TableError extends Error {
   /** Stable code. */
-  readonly code: 'EMPTY' | 'UNTERMINATED_QUOTE'
-  constructor(code: 'EMPTY' | 'UNTERMINATED_QUOTE', message: string) {
+  readonly code: 'EMPTY' | 'UNTERMINATED_QUOTE' | 'INVALID_SHAPE'
+  constructor(code: 'EMPTY' | 'UNTERMINATED_QUOTE' | 'INVALID_SHAPE', message: string) {
     super(message)
     this.name = 'TableError'
     this.code = code

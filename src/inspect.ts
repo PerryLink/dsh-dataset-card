@@ -123,12 +123,22 @@ export function parseDataset(body: string, format: DatasetFormat, maxRows: numbe
   if (format === 'json') {
     const parsed = JSON.parse(body) as unknown
     if (!Array.isArray(parsed)) throw new TableError('EMPTY', 'JSON datasets must be an array of objects')
+    if (parsed.some(object => typeof object !== 'object' || object === null || Array.isArray(object))) {
+      throw new TableError('INVALID_SHAPE', 'JSON datasets must be an array of objects')
+    }
     const objects = parsed.slice(0, maxRows) as Array<Record<string, unknown>>
     const columns = [...new Set(objects.flatMap(object => Object.keys(object)))]
     return { columns, rows: objects.map(object => columns.map(column => object[column] === undefined ? '' : String(object[column]))), truncated: parsed.length > maxRows }
   }
   const lines = body.split('\n').filter(line => line.trim() !== '')
-  const objects = lines.slice(0, maxRows).map(line => JSON.parse(line) as Record<string, unknown>)
+  if (lines.length === 0) throw new TableError('EMPTY', 'the JSONL file is empty')
+  const objects = lines.slice(0, maxRows).map((line, index) => {
+    const object = JSON.parse(line) as unknown
+    if (typeof object !== 'object' || object === null || Array.isArray(object)) {
+      throw new TableError('INVALID_SHAPE', `JSONL line ${String(index + 1)} must be a JSON object`)
+    }
+    return object as Record<string, unknown>
+  })
   const columns = [...new Set(objects.flatMap(object => Object.keys(object)))]
   return { columns, rows: objects.map(object => columns.map(column => object[column] === undefined ? '' : String(object[column]))), truncated: lines.length > maxRows }
 }
