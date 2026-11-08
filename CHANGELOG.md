@@ -4,7 +4,13 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.1.1] - 2026-11-08
+
+### Changed
+
+- Release-engineering refresh: CHANGELOG accuracy, package metadata and authors; no runtime changes.
+
+## [0.1.0] - 2026-11-08
 
 ### Fixed
 
@@ -12,11 +18,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   instead of throwing a `TypeError`.
 - `dataset_pii`/`dataset_card` validate the supplied inspection and return
   `INVALID_INPUT` for malformed JSON instead of throwing in the renderer.
-- Package author corrected to the dataset-card contributors.
+- Package author aligned with the published author.
 - Regression tests for shape rejection and malformed inspection JSON (13 total).
-
-
-## [0.1.0] - 2026-11-08
 
 First release: dataset profiling, redacted PII scan and Datasheet export.
 
