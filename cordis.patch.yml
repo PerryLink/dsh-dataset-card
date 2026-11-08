@@ -1,0 +1,16 @@
+# dsh-dataset-card bundle patch: mount the dataset-card tools.
+#
+# Every key below is a Config field (Schemastery schema); invalid values fail the
+# profile load loudly. Only the analysis is stored as evidence; raw rows never are.
+- insert:
+    - id: dsh-dataset-card
+      name: dsh-dataset-card
+      config:
+        enabled: true
+        root: .dataset-card
+        # Dataset file cap; over-limit fails, never truncated.
+        maxBytes: 20971520
+        # Rows scanned for the profile (the profile is a sample, not an audit).
+        maxRows: 10000
+        # Store the analysis (not the rows) as REP evidence + record.
+        persist: true
