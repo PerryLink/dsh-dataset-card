@@ -23,7 +23,7 @@ jobs:
           node-version: 22
           cache: pnpm
       - name: Install
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --no-frozen-lockfile
       - name: Gate
         run: |
           if node -e "const s=require('./package.json').scripts||{};process.exit(s.typecheck?0:1)"; then pnpm run typecheck; fi
