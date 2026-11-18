@@ -1,0 +1,68 @@
+name: Release
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11.7.0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+      - name: Install
+        run: pnpm install --frozen-lockfile
+      - name: Gate
+        run: |
+          if node -e "const s=require('./package.json').scripts||{};process.exit(s.typecheck?0:1)"; then pnpm run typecheck; fi
+          if node -e "const s=require('./package.json').scripts||{};process.exit(s.test?0:1)"; then pnpm test; fi
+          if node -e "const s=require('./package.json').scripts||{};process.exit(s.build?0:1)"; then pnpm run build; fi
+      - name: Verify the changelog names this version
+        run: |
+          VERSION="$(node -p "require('./package.json').version")"
+          grep -q "## \[${VERSION}\]" CHANGELOG.md || { echo "CHANGELOG.md has no section for ${VERSION}"; exit 1; }
+      - name: Upgrade npm and show the OIDC environment
+        run: |
+          npm install -g npm@^11.5.1
+          echo "npm: $(npm --version)"
+          if [ -n "${ACTIONS_ID_TOKEN_REQUEST_TOKEN:-}" ]; then echo "OIDC request TOKEN: present"; else echo "OIDC request TOKEN: MISSING"; fi
+      - name: Publish to npm
+        env:
+          NPM_CONFIG_LOGLEVEL: verbose
+        run: |
+          name="$(node -p "require('./package.json').name")"
+          version="$(node -p "require('./package.json').version")"
+          if npm view "${name}@${version}" version >/dev/null 2>&1; then
+            echo "${name}@${version} is already published; skipping"
+          else
+            npm publish --provenance --access public
+          fi
+  release:
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+      - name: Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          tag="v${version}"
+          if gh release view "${tag}" >/dev/null 2>&1; then echo "release ${tag} already exists; skipping"; exit 0; fi
+          gh release create "${tag}" --target "${GITHUB_SHA}" --title "${tag}" --generate-notes
