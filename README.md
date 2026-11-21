@@ -116,7 +116,7 @@ dsh --profile <name> --dump-config | grep dsh-dataset-card
 *Animated: the real `pnpm test` output on 2026-11-21 (3 test files). The plugin has no CLI, so its own suite is the run — parsing, redaction, the REP record and the Datasheet card.*
 
 
-**13 tests**: quoted CSV parsing (embedded commas, escaped quotes, newlines), type inference, column profiling and missingness, PII detection by column name and value pattern with a no-leak assertion, missing-license and PII-without-ethics issues, JSON/TSV parsing, row-cap truncation, runtime (record validity, analysis-only evidence, sha256 data artifact), traversal/unsupported/oversize/parse-error/shape rejection, malformed-inspection tool guards, tool schemas, inspect→pii→card end to end, failure branches, package contract.
+**14 tests**: quoted CSV parsing (embedded commas, escaped quotes, newlines), type inference, column profiling and missingness, PII detection by column name and value pattern with a no-leak assertion, missing-license and PII-without-ethics issues, JSON/TSV parsing, row-cap truncation, runtime (record validity, analysis-only evidence, sha256 data artifact), traversal/unsupported/oversize/parse-error/shape rejection, malformed-inspection tool guards, tool schemas, inspect→pii→card end to end, failure branches, package contract.
 
 No benchmark is claimed: this is a rule-based profiler; its correctness is the redaction and the checks, both pinned by fixtures.
 
