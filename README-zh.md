@@ -1,13 +1,22 @@
+<div align="center">
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-dataset-card-hero-zh-dark.webp">
+  <img src="docs/assets/dsh-dataset-card-hero-zh-light.webp" width="100%" alt="dsh-dataset-card 配图：people.csv 的 5 行画像——chk-dc-rows 通过、no_license 记 warn、pii_without_ethics 记 fail；右侧是脱敏后的 PII 发现与画像摘要">
+</picture>
+
 # dsh-dataset-card
 
 **发布数据集时附上一份 Datasheet——并在发布前搞清楚个人数据在哪里。**
 
 *在行数上限内对 CSV/TSV/JSON/JSONL 做画像，按列名和脱敏后的值模式标记疑似 PII 的列，拒绝把原始行存为证据，并导出带缺失章节警告的 Datasheet 风格卡片。*
 
+[English](README.md) · [Español](README-es.md) · [Português](README-pt.md) · [हिन्दी](README-hi.md)
+
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 [![Node](https://img.shields.io/badge/node-%5E22.19%20%7C%7C%20%3E%3D24.9-brightgreen.svg)]()
 
-[English](README.md) · 简体中文
+</div>
 
 ---
 
@@ -16,6 +25,14 @@
 - **`dataset_inspect`** — 有界读取 `.csv`/`.tsv`/`.json`/`.jsonl`：列名、推断类型、缺失情况、抽样基数，以及基于列名和值模式的 PII 发现（email、电话、身份证号、IPv4、姓名/地址/出生日期/IP 列）。许可证与伦理声明是输入项；缺失会变成一个问题项。
 - **`dataset_pii`** — 按种类和风险对脱敏后的发现分组，并给出下一步动作（去标识化、限制访问、记录同意）。
 - **`dataset_card`** — Datasheet 风格卡片：Motivation、Composition（列表格）、Collection、Preprocessing、Uses、Distribution、Maintenance；缺失的章节会被列出，并转为 SARIF 警告。
+
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-dataset-card-flow-v5-dark.svg">
+  <img src="docs/assets/dsh-dataset-card-flow-v5-light.svg" width="100%" alt="dsh-dataset-card 结构图：CSV/TSV/JSON/JSONL 数据集在字节与行数上限内读入，画像出列类型、缺失情况与脱敏后的 PII，记入 REP 检查，数据集本身只保留为 sha256 artifact，再导出 Datasheet 卡片与 SARIF 2.1.0">
+</picture>
+
+*结构：读取 → 画像 → 记录；`inspection` 与 `issues[]` 是两条输出，只有分析结果成为证据——数据集本身只是一个 sha256 artifact。图内只有工具名、字段名与检查名，五语共用同一张结构图。*
 
 ## 隐私设计（有意为之）
 
@@ -93,6 +110,11 @@ dsh --profile <name> --dump-config | grep dsh-dataset-card
 - 值只用于模式匹配，绝不写入日志。
 
 ## 评测
+
+![dsh-dataset-card 测试套件：3 个测试文件的真实运行——6 项画像测试、挂载契约与 7 项运行时和工具测试全部通过](docs/assets/dsh-dataset-card-demo.gif)
+
+*动图是 2026-11-21 真实 `pnpm test` 的输出（3 个测试文件）。该插件没有 CLI，因此用它自己的测试套件作为一次真实运行——解析、脱敏、REP 记录与 Datasheet 卡片。*
+
 
 **13 个测试**：带引号的 CSV 解析（内嵌逗号、转义引号、换行）、类型推断、列画像与缺失情况、按列名和值模式检测 PII 并断言不泄漏、缺许可证与有 PII 却无伦理声明的问题、JSON/TSV 解析、行数上限截断、运行时（记录有效性、仅含分析结果的证据、sha256 数据 artifact）、路径穿越/不支持的格式/超大文件/解析错误/形状不符的拒绝、畸形 inspection 的工具防护、工具 schema、inspect→pii→card 端到端、失败分支、包契约。
 

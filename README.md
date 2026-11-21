@@ -1,13 +1,22 @@
+<div align="center">
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-dataset-card-hero-en-dark.webp">
+  <img src="docs/assets/dsh-dataset-card-hero-en-light.webp" width="100%" alt="dsh-dataset-card: people.csv profiled in 5 rows — chk-dc-rows pass, no_license warn and pii_without_ethics fail — with the redacted PII findings and the inspection summary on the right">
+</picture>
+
 # dsh-dataset-card
 
 **Publish the dataset with a Datasheet — and know where the personal data is before you do.**
 
 *Profiles CSV/TSV/JSON/JSONL with a row cap, flags PII-like columns by name and redacted value patterns, refuses to store raw rows as evidence, and exports a Datasheet-style card with missing-section warnings.*
 
+[简体中文](README-zh.md) · [Español](README-es.md) · [Português](README-pt.md) · [हिन्दी](README-hi.md)
+
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 [![Node](https://img.shields.io/badge/node-%5E22.19%20%7C%7C%20%3E%3D24.9-brightgreen.svg)]()
 
-English · [简体中文](README-zh.md)
+</div>
 
 ---
 
@@ -16,6 +25,14 @@ English · [简体中文](README-zh.md)
 - **`dataset_inspect`** — bounded read of `.csv`/`.tsv`/`.json`/`.jsonl`: column names, inferred types, missingness, sampled cardinality, and PII findings from column names and value patterns (email, phone, national ID, IPv4, name/address/DOB/IP columns). License and ethics statements are inputs; their absence becomes an issue.
 - **`dataset_pii`** — groups the redacted findings by kind and risk and gives the next action (de-identify, restrict, record consent).
 - **`dataset_card`** — Datasheet-style card: Motivation, Composition (column table), Collection, Preprocessing, Uses, Distribution, Maintenance; missing sections are listed and become SARIF warnings.
+
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-dataset-card-flow-v5-dark.svg">
+  <img src="docs/assets/dsh-dataset-card-flow-v5-light.svg" width="100%" alt="dsh-dataset-card structure: a CSV/TSV/JSON/JSONL dataset is read under a byte and row cap, profiled into column types, missingness and redacted PII, recorded as REP checks with the dataset kept only as a sha256 artifact, and exported as a Datasheet card plus SARIF 2.1.0">
+</picture>
+
+*Structure: read → profile → record; the `inspection` and `issues[]` are the two outputs, and only the analysis becomes evidence — the dataset itself stays a sha256 artifact. The token labels inside the diagram are the real tool, field and check names, so the same picture serves all five languages.*
 
 ## Privacy design (deliberate)
 
@@ -93,6 +110,11 @@ dsh --profile <name> --dump-config | grep dsh-dataset-card
 - Values are only ever used for pattern matching; they are not logged.
 
 ## Evaluation
+
+![dsh-dataset-card test suite: a real run of the 3 test files — 6 inspection tests, the mount contract and 7 runtime and tool tests all pass](docs/assets/dsh-dataset-card-demo.gif)
+
+*Animated: the real `pnpm test` output on 2026-11-21 (3 test files). The plugin has no CLI, so its own suite is the run — parsing, redaction, the REP record and the Datasheet card.*
+
 
 **13 tests**: quoted CSV parsing (embedded commas, escaped quotes, newlines), type inference, column profiling and missingness, PII detection by column name and value pattern with a no-leak assertion, missing-license and PII-without-ethics issues, JSON/TSV parsing, row-cap truncation, runtime (record validity, analysis-only evidence, sha256 data artifact), traversal/unsupported/oversize/parse-error/shape rejection, malformed-inspection tool guards, tool schemas, inspect→pii→card end to end, failure branches, package contract.
 
