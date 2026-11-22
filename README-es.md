@@ -26,7 +26,6 @@
 - **`dataset_pii`** — agrupa los hallazgos redactados por tipo y riesgo y da la siguiente acción (anonimizar, restringir, registrar el consentimiento).
 - **`dataset_card`** — tarjeta estilo Datasheet: Motivation, Composition (tabla de columnas), Collection, Preprocessing, Uses, Distribution, Maintenance; las secciones ausentes se listan y se convierten en avisos SARIF.
 
-
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-dataset-card-flow-v5-dark.svg">
   <img src="docs/assets/dsh-dataset-card-flow-v5-light.svg" width="100%" alt="dsh-dataset-card estructura: un conjunto de datos CSV/TSV/JSON/JSONL se lee bajo un límite de bytes y filas, se perfila en tipos de columna, ausencias y PII redactada, se registra como comprobaciones REP con el conjunto de datos conservado solo como artefacto sha256, y se exporta como tarjeta Datasheet y SARIF 2.1.0">
@@ -81,7 +80,7 @@
 
 | | |
 |---|---|
-| DeepSeek Harness | **`dsh-v0.2.2-rc.4`** (verificado 2026-11-18); peer `>=0.2.1-0 <0.3.0 \|\| >=0.2.2-0 <0.3.0` |
+| DeepSeek Harness | **`dsh-v0.2.3-alpha.1`** (verificado 2026-11-22); peer `>=0.2.1-0 <0.3.0 \|\| >=0.2.2-0 <0.3.0` |
 | Node | `^22.19.0 \|\| >=24.9.0` (probado en `24.22.1`), solo ESM |
 | Pares | `@perrylink/dsh-research-core ^0.1.0`, `@deepseek-ai/cordis ^4.0.5-alpha.1`, `@deepseek-ai/dsh-tools`, `@deepseek-ai/schemastery ^3.18.5-alpha.1` |
 | Dependencias en tiempo de ejecución | **cero** |
@@ -114,7 +113,6 @@ dsh --profile <name> --dump-config | grep dsh-dataset-card
 ![conjunto de pruebas de dsh-dataset-card: una ejecución real de los 3 archivos de prueba — 6 pruebas de inspección, el contrato de montaje y 7 pruebas de tiempo de ejecución y herramientas pasan](docs/assets/dsh-dataset-card-demo.gif)
 
 *Animado: la salida real de `pnpm test` el 2026-11-21 (3 archivos de prueba). El plugin no tiene CLI, así que su propio conjunto de pruebas es la ejecución — análisis, redacción, el registro REP y la tarjeta Datasheet.*
-
 
 **14 pruebas**: análisis de CSV entre comillas (comas incrustadas, comillas escapadas, saltos de línea), inferencia de tipos, perfilado de columnas y valores ausentes, detección de PII por nombre de columna y patrón de valores con una aserción de no filtración, problemas de licencia ausente y de PII sin ética, análisis de JSON/TSV, truncado por límite de filas, tiempo de ejecución (validez del registro, evidencia solo de análisis, artefacto de datos sha256), rechazo de rutas de escape/formato no admitido/tamaño excesivo/error de análisis/forma incorrecta, protecciones de las herramientas ante inspecciones malformadas, esquemas de las herramientas, de inspección a PII y a tarjeta de extremo a extremo, ramas de fallo y contrato del paquete.
 

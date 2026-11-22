@@ -26,7 +26,6 @@
 - **`dataset_pii`** — redact किए गए निष्कर्षों को प्रकार और जोखिम के अनुसार समूहित करता है और अगली कार्रवाई देता है (de-identify, प्रतिबंधित करें, सहमति दर्ज करें)।
 - **`dataset_card`** — Datasheet-शैली कार्ड: Motivation, Composition (कॉलम तालिका), Collection, Preprocessing, Uses, Distribution, Maintenance; अनुपस्थित अनुभाग सूचीबद्ध होते हैं और SARIF चेतावनियाँ बनते हैं।
 
-
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-dataset-card-flow-v5-dark.svg">
   <img src="docs/assets/dsh-dataset-card-flow-v5-light.svg" width="100%" alt="dsh-dataset-card संरचना: एक CSV/TSV/JSON/JSONL डेटासेट बाइट और पंक्ति सीमा के अंतर्गत पढ़ा जाता है, कॉलम प्रकार, अनुपस्थिति और redact किए गए PII में प्रोफ़ाइल होता है, REP जाँचों के रूप में दर्ज होता है जिसमें डेटासेट केवल sha256 artifact के रूप में रहता है, और Datasheet कार्ड तथा SARIF 2.1.0 में निर्यात होता है">
@@ -81,7 +80,7 @@
 
 | | |
 |---|---|
-| DeepSeek Harness | **`dsh-v0.2.2-rc.4`** (2026-11-18 को सत्यापित); peer `>=0.2.1-0 <0.3.0 \|\| >=0.2.2-0 <0.3.0` |
+| DeepSeek Harness | **`dsh-v0.2.3-alpha.1`** (2026-11-22 को सत्यापित); peer `>=0.2.1-0 <0.3.0 \|\| >=0.2.2-0 <0.3.0` |
 | Node | `^22.19.0 \|\| >=24.9.0` (`24.22.1` पर परीक्षित), केवल ESM |
 | Peer | `@perrylink/dsh-research-core ^0.1.0`, `@deepseek-ai/cordis ^4.0.5-alpha.1`, `@deepseek-ai/dsh-tools`, `@deepseek-ai/schemastery ^3.18.5-alpha.1` |
 | रनटाइम निर्भरताएँ | **शून्य** |
@@ -114,7 +113,6 @@ dsh --profile <name> --dump-config | grep dsh-dataset-card
 ![dsh-dataset-card टेस्ट सूट: 3 टेस्ट फ़ाइलों का असली रन — 6 निरीक्षण टेस्ट, माउंट कॉन्ट्रैक्ट और 7 रनटाइम व टूल टेस्ट सभी पास](docs/assets/dsh-dataset-card-demo.gif)
 
 *एनिमेटेड: 2026-11-21 को असली `pnpm test` का आउटपुट (3 टेस्ट फ़ाइलें)। इस प्लगइन में CLI नहीं है, इसलिए उसका अपना टेस्ट सूट ही रन है — पार्सिंग, redaction, REP रिकॉर्ड और Datasheet कार्ड।*
-
 
 **14 टेस्ट**: उद्धृत CSV पार्सिंग (एम्बेडेड अल्पविराम, escaped उद्धरण, नई पंक्तियाँ), प्रकार अनुमान, कॉलम प्रोफ़ाइलिंग और अनुपस्थिति, कॉलम नाम व मान पैटर्न से PII पहचान और no-leak assertion, लाइसेंस अनुपस्थित तथा नैतिकता के बिना PII की समस्याएँ, JSON/TSV पार्सिंग, पंक्ति-सीमा truncation, रनटाइम (रिकॉर्ड की वैधता, केवल-विश्लेषण साक्ष्य, sha256 डेटा artifact), traversal/असमर्थित/अत्यधिक आकार/parse-error/shape की अस्वीकृति, विकृत inspection के विरुद्ध टूल गार्ड, टूल स्कीमा, inspect→pii→card एंड-टू-एंड, विफलता शाखाएँ, पैकेज कॉन्ट्रैक्ट।
 

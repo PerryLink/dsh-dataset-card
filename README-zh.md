@@ -26,7 +26,6 @@
 - **`dataset_pii`** — 按种类和风险对脱敏后的发现分组，并给出下一步动作（去标识化、限制访问、记录同意）。
 - **`dataset_card`** — Datasheet 风格卡片：Motivation、Composition（列表格）、Collection、Preprocessing、Uses、Distribution、Maintenance；缺失的章节会被列出，并转为 SARIF 警告。
 
-
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-dataset-card-flow-v5-dark.svg">
   <img src="docs/assets/dsh-dataset-card-flow-v5-light.svg" width="100%" alt="dsh-dataset-card 结构图：CSV/TSV/JSON/JSONL 数据集在字节与行数上限内读入，画像出列类型、缺失情况与脱敏后的 PII，记入 REP 检查，数据集本身只保留为 sha256 artifact，再导出 Datasheet 卡片与 SARIF 2.1.0">
@@ -81,7 +80,7 @@
 
 | | |
 |---|---|
-| DeepSeek Harness | **`dsh-v0.2.2-rc.4`**（2026-11-18 实测）；peer `>=0.2.1-0 <0.3.0 \|\| >=0.2.2-0 <0.3.0` |
+| DeepSeek Harness | **`dsh-v0.2.3-alpha.1`**（2026-11-22 实测）；peer `>=0.2.1-0 <0.3.0 \|\| >=0.2.2-0 <0.3.0` |
 | Node | `^22.19.0 \|\| >=24.9.0`（实测 `24.22.1`），仅 ESM |
 | Peer 依赖 | `@perrylink/dsh-research-core ^0.1.0`、`@deepseek-ai/cordis ^4.0.5-alpha.1`、`@deepseek-ai/dsh-tools`、`@deepseek-ai/schemastery ^3.18.5-alpha.1` |
 | 运行时依赖 | **零** |
@@ -114,7 +113,6 @@ dsh --profile <name> --dump-config | grep dsh-dataset-card
 ![dsh-dataset-card 测试套件：3 个测试文件的真实运行——6 项画像测试、挂载契约与 7 项运行时和工具测试全部通过](docs/assets/dsh-dataset-card-demo.gif)
 
 *动图是 2026-11-21 真实 `pnpm test` 的输出（3 个测试文件）。该插件没有 CLI，因此用它自己的测试套件作为一次真实运行——解析、脱敏、REP 记录与 Datasheet 卡片。*
-
 
 **14 个测试**：带引号的 CSV 解析（内嵌逗号、转义引号、换行）、类型推断、列画像与缺失情况、按列名和值模式检测 PII 并断言不泄漏、缺许可证与有 PII 却无伦理声明的问题、JSON/TSV 解析、行数上限截断、运行时（记录有效性、仅含分析结果的证据、sha256 数据 artifact）、路径穿越/不支持的格式/超大文件/解析错误/形状不符的拒绝、畸形 inspection 的工具防护、工具 schema、inspect→pii→card 端到端、失败分支、包契约。
 

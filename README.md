@@ -26,7 +26,6 @@
 - **`dataset_pii`** — groups the redacted findings by kind and risk and gives the next action (de-identify, restrict, record consent).
 - **`dataset_card`** — Datasheet-style card: Motivation, Composition (column table), Collection, Preprocessing, Uses, Distribution, Maintenance; missing sections are listed and become SARIF warnings.
 
-
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/dsh-dataset-card-flow-v5-dark.svg">
   <img src="docs/assets/dsh-dataset-card-flow-v5-light.svg" width="100%" alt="dsh-dataset-card structure: a CSV/TSV/JSON/JSONL dataset is read under a byte and row cap, profiled into column types, missingness and redacted PII, recorded as REP checks with the dataset kept only as a sha256 artifact, and exported as a Datasheet card plus SARIF 2.1.0">
@@ -81,7 +80,7 @@
 
 | | |
 |---|---|
-| DeepSeek Harness | **`dsh-v0.2.2-rc.4`** (verified 2026-11-18); peer `>=0.2.1-0 <0.3.0 \|\| >=0.2.2-0 <0.3.0` |
+| DeepSeek Harness | **`dsh-v0.2.3-alpha.1`** (verified 2026-11-22); peer `>=0.2.1-0 <0.3.0 \|\| >=0.2.2-0 <0.3.0` |
 | Node | `^22.19.0 \|\| >=24.9.0` (tested `24.22.1`), ESM only |
 | Peers | `@perrylink/dsh-research-core ^0.1.0`, `@deepseek-ai/cordis ^4.0.5-alpha.1`, `@deepseek-ai/dsh-tools`, `@deepseek-ai/schemastery ^3.18.5-alpha.1` |
 | Runtime dependencies | **zero** |
@@ -114,7 +113,6 @@ dsh --profile <name> --dump-config | grep dsh-dataset-card
 ![dsh-dataset-card test suite: a real run of the 3 test files — 6 inspection tests, the mount contract and 7 runtime and tool tests all pass](docs/assets/dsh-dataset-card-demo.gif)
 
 *Animated: the real `pnpm test` output on 2026-11-21 (3 test files). The plugin has no CLI, so its own suite is the run — parsing, redaction, the REP record and the Datasheet card.*
-
 
 **14 tests**: quoted CSV parsing (embedded commas, escaped quotes, newlines), type inference, column profiling and missingness, PII detection by column name and value pattern with a no-leak assertion, missing-license and PII-without-ethics issues, JSON/TSV parsing, row-cap truncation, runtime (record validity, analysis-only evidence, sha256 data artifact), traversal/unsupported/oversize/parse-error/shape rejection, malformed-inspection tool guards, tool schemas, inspect→pii→card end to end, failure branches, package contract.
 
