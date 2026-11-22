@@ -7,6 +7,8 @@
 
 # dsh-dataset-card
 
+当前版本 `0.1.4`。
+
 **Publish the dataset with a Datasheet — and know where the personal data is before you do.**
 
 *Profiles CSV/TSV/JSON/JSONL with a row cap, flags PII-like columns by name and redacted value patterns, refuses to store raw rows as evidence, and exports a Datasheet-style card with missing-section warnings.*

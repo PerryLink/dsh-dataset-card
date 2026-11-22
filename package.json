@@ -1,6 +1,6 @@
 {
   "name": "dsh-dataset-card",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Dataset documentation for DeepSeek Harness: bounded CSV/TSV/JSON/JSONL profiling (types, missingness, cardinality), redacted PII detection by column name and value pattern (emails, phones, national IDs, IPs), a Datasheet-style card with missing-section warnings, Markdown/JSON/SARIF output and REP evidence that stores the analysis but never the raw rows.",
   "author": "PerryLink contributors",
   "repository": {
@@ -20,7 +20,8 @@
       "types": "./lib/index.d.ts",
       "default": "./lib/index.js"
     },
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./locale/*.json": "./locale/*.json"
   },
   "files": [
     "lib",
@@ -32,7 +33,9 @@
     "LICENSE",
     "SECURITY.md",
     "docs/assets/*",
-    "THIRD_PARTY_NOTICES.md"
+    "THIRD_PARTY_NOTICES.md",
+    "locale/*.json",
+    "icon.png"
   ],
   "sideEffects": false,
   "dsh": {
@@ -80,5 +83,6 @@
     "test:watch": "vitest",
     "verify:package": "node scripts/verify-package.mjs"
   },
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "icon": "icon.png"
 }

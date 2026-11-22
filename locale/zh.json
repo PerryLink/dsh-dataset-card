@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "数据集 Datasheet",
+    "description": "发布数据集时附上一份 Datasheet——并在发布前搞清楚个人数据在哪里。对 CSV/TSV/JSON/JSONL 做画像，按列名与脱敏值模式标记疑似 PII，拒绝把原始行存为证据。"
+  }
+}
